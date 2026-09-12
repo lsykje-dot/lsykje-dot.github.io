@@ -3,185 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>오늘의 마음훈련 - 미래가 현재를 바꾸는 문구</title>
+<title>오늘의 마음훈련 대시보드</title>
 <style>
   :root{
-    --bg-top:#0b1030;
-    --bg-bottom:#1b2454;
-    --card-bg:rgba(255,255,255,0.06);
-    --card-border:rgba(255,255,255,0.14);
+    --panel-bg:#0b1030;
+    --panel-bg2:#161c46;
     --text-main:#f4f5fb;
-    --text-sub:#b9bfe0;
+    --text-sub:#aab0d6;
     --accent:#ffd76a;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;height:100%;}
   body{
-    min-height:100vh;
-    background:radial-gradient(ellipse at top, var(--bg-bottom), var(--bg-top) 70%);
-    color:var(--text-main);
     font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
-    display:flex;
-    justify-content:center;
-    padding:24px 12px 60px;
-    position:relative;
-    overflow-x:hidden;
-  }
-  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
-  #stars span{
-    position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
-    opacity:.5;animation:twinkle 3.5s ease-in-out infinite;
-  }
-  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:.9;}}
-
-  .app{position:relative;z-index:1;width:100%;max-width:480px;}
-
-  header{text-align:center;margin-bottom:14px;}
-  header h1{font-size:1.3rem;margin:0 0 4px;font-weight:700;letter-spacing:-0.02em;}
-  header .date{color:var(--text-sub);font-size:.85rem;}
-  .streak{
-    display:inline-flex;align-items:center;gap:6px;margin-top:10px;
-    background:rgba(255,215,106,0.12);border:1px solid rgba(255,215,106,0.35);
-    color:var(--accent);padding:5px 14px;border-radius:999px;font-size:.82rem;font-weight:600;
+    background:var(--panel-bg);
+    color:var(--text-main);
   }
 
-  .tabs{display:flex;gap:8px;margin:18px 0 14px;}
-  .tabs button{
-    flex:1;padding:10px 0;border-radius:12px;border:1px solid var(--card-border);
-    background:var(--card-bg);color:var(--text-sub);font-size:.9rem;font-weight:600;
-    cursor:pointer;transition:.15s;
-  }
-  .tabs button.active{background:var(--accent);color:#22262f;border-color:var(--accent);}
+  .stage{min-height:100vh;display:flex;flex-direction:column;}
 
-  .card{
-    background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;
-    padding:22px 20px;backdrop-filter:blur(6px);margin-bottom:16px;
+  /* ---------- 상단 2/3 : 이미지 영역 ---------- */
+  .image-zone{
+    flex:2 1 0;position:relative;overflow:hidden;min-height:280px;
+  }
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .4s;}
+  .scene.active{opacity:1;}
+
+  .scene-photo{background:#111 center/cover no-repeat;}
+  .scene-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%);
   }
 
+  .scene-forest{background:linear-gradient(180deg,#cfe9ff 0%,#ffe9b8 50%,#ffcf7a 72%,#284a2b 100%);}
+  .scene-forest .sun{
+    position:absolute;top:16%;left:50%;transform:translate(-50%,-50%);
+    width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle,#fffbe0 0%,#ffe07a 45%,rgba(255,224,122,0) 72%);
+    box-shadow:0 0 130px 65px rgba(255,224,122,.5);
+  }
+  .scene-forest .rays{
+    position:absolute;inset:0;mix-blend-mode:screen;opacity:.55;
+    background:repeating-conic-gradient(from 0deg at 50% 18%, rgba(255,255,255,.22) 0deg 3deg, transparent 3deg 13deg);
+  }
+  .scene-forest .trees{position:absolute;left:0;right:0;bottom:0;height:48%;}
+  .scene-forest .trees svg{width:100%;height:100%;display:block;}
+  .scene-forest .mist{
+    position:absolute;left:0;right:0;bottom:30%;height:20%;
+    background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0));
+    filter:blur(6px);
+  }
+
+  .scene-universe{background:radial-gradient(ellipse at 50% 28%,#2c1c58 0%,#0d1338 55%,#05061a 100%);}
+  .scene-universe .glow{
+    position:absolute;border-radius:50%;filter:blur(30px);opacity:.55;
+  }
+  .scene-universe .glow.g1{width:220px;height:220px;background:#6a4fd6;top:8%;left:8%;}
+  .scene-universe .glow.g2{width:260px;height:260px;background:#3d6ad6;bottom:6%;right:6%;}
+  .scene-universe .stars span{
+    position:absolute;background:#fff;border-radius:50%;
+    animation:twinkle 3.2s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.2;}50%{opacity:1;}}
+
+  .date-tag{
+    position:absolute;top:14px;left:16px;z-index:2;
+    background:rgba(0,0,0,.35);backdrop-filter:blur(3px);
+    padding:6px 14px;border-radius:999px;font-size:.78rem;color:#fff;
+  }
+
+  /* ---------- 하단 1/3 : 문구 영역 ---------- */
+  .quote-zone{
+    flex:1 1 0;min-height:220px;background:var(--panel-bg2);
+    display:flex;align-items:center;justify-content:center;
+    padding:22px 18px;overflow-y:auto;
+  }
+  .quote-card{max-width:560px;width:100%;}
   .badge{
-    display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:700;
-    color:#fff;margin-bottom:14px;
+    display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:700;color:#fff;margin-bottom:12px;
   }
-  .badge-sub{display:block;font-size:.7rem;font-weight:500;opacity:.85;margin-top:2px;}
-
   .quote-text{
-    font-size:1.28rem;line-height:1.55;font-weight:600;margin:6px 0 16px;position:relative;padding:0 6px;
+    font-size:1.3rem;line-height:1.55;font-weight:600;margin:0 0 14px;position:relative;
   }
-  .quote-text::before{content:"“";font-size:1.4em;color:var(--accent);margin-right:2px;vertical-align:-0.15em;}
-  .quote-text::after{content:"”";font-size:1.4em;color:var(--accent);margin-left:2px;vertical-align:-0.5em;}
-
-  .concept-line{color:var(--text-sub);font-size:.82rem;margin-bottom:2px;}
-  .concept-line b{color:var(--text-main);}
-
-  .card-top-row{display:flex;justify-content:space-between;align-items:flex-start;}
-  .star-btn{background:none;border:none;color:var(--text-sub);font-size:1.3rem;cursor:pointer;line-height:1;padding:2px 4px;}
-  .star-btn.active{color:var(--accent);}
-
-  .section-title{font-size:.95rem;font-weight:700;margin:22px 0 10px 2px;color:var(--text-main);}
-  .checklist{display:flex;flex-direction:column;gap:8px;}
-  .check-item{
-    display:flex;align-items:flex-start;gap:10px;background:var(--card-bg);
-    border:1px solid var(--card-border);border-radius:12px;padding:10px 12px;cursor:pointer;
-  }
-  .check-item input{margin-top:3px;width:16px;height:16px;accent-color:var(--accent);flex:none;}
-  .check-item .lbl{font-size:.86rem;line-height:1.4;}
-  .check-item .lbl small{display:block;color:var(--text-sub);font-size:.74rem;margin-top:1px;}
-  .check-item.done .lbl{color:var(--text-sub);text-decoration:line-through;}
-
-  .filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-  .filters button{
-    padding:6px 12px;border-radius:999px;border:1px solid var(--card-border);background:var(--card-bg);
-    color:var(--text-sub);font-size:.76rem;cursor:pointer;
-  }
-  .filters button.active{background:#fff;color:#111;border-color:#fff;}
-
-  .list-item{
-    border:1px solid var(--card-border);border-left-width:4px;border-radius:10px;
-    padding:10px 12px;margin-bottom:8px;background:var(--card-bg);display:flex;justify-content:space-between;gap:10px;
-  }
-  .list-item.today{outline:2px solid var(--accent);}
-  .list-item .txt{font-size:.86rem;line-height:1.45;}
-  .list-item .cat{font-size:.68rem;color:var(--text-sub);margin-top:3px;}
-
-  footer{margin-top:28px;text-align:center;color:var(--text-sub);font-size:.78rem;line-height:1.7;}
-  footer .quote-final{color:var(--text-main);font-weight:600;font-size:.86rem;margin-bottom:10px;}
-  footer a{color:var(--accent);text-decoration:none;}
+  .quote-text::before{content:"“";color:var(--accent);margin-right:2px;}
+  .quote-text::after{content:"”";color:var(--accent);margin-left:2px;}
+  .source{color:var(--text-sub);font-size:.86rem;margin-bottom:6px;}
+  .disclaimer{color:var(--text-sub);font-size:.72rem;opacity:.75;}
 
   [hidden]{display:none!important;}
 </style>
 </head>
 <body>
 
-<div id="stars"></div>
+<div class="stage">
+  <div class="image-zone" id="imageZone">
+    <div class="date-tag" id="dateTag"></div>
 
-<div class="app">
-  <header>
-    <h1>🌌 오늘의 마음훈련</h1>
-    <div class="date" id="todayDate"></div>
-    <div class="streak" id="streakBadge">🔥 연속 0일째 실천 중</div>
-  </header>
+    <div class="scene scene-photo" id="scenePhoto" style="background-image:url('assets/day-photo.png');"></div>
 
-  <nav class="tabs">
-    <button data-view="today" class="active">오늘의 문구</button>
-    <button data-view="archive">전체 보기</button>
-  </nav>
-
-  <section id="view-today">
-    <div class="card">
-      <div class="card-top-row">
-        <div>
-          <span class="badge" id="todayBadge"></span>
-        </div>
-        <button class="star-btn" id="todayStar" title="즐겨찾기">☆</button>
+    <div class="scene scene-forest" id="sceneForest">
+      <div class="rays"></div>
+      <div class="sun"></div>
+      <div class="mist"></div>
+      <div class="trees">
+        <svg viewBox="0 0 400 140" preserveAspectRatio="none">
+          <polygon points="30,140 55,60 80,140" fill="#1f3a20"/>
+          <polygon points="70,140 100,40 130,140" fill="#22401f"/>
+          <polygon points="115,140 145,70 175,140" fill="#1c3618"/>
+          <polygon points="160,140 195,35 230,140" fill="#254a22"/>
+          <polygon points="210,140 240,65 270,140" fill="#1e3a1c"/>
+          <polygon points="250,140 285,30 320,140" fill="#274d24"/>
+          <polygon points="300,140 330,60 360,140" fill="#1c3a1a"/>
+          <polygon points="340,140 375,45 400,140" fill="#22401f"/>
+        </svg>
       </div>
-      <div class="quote-text" id="todayQuoteText"></div>
-      <div class="concept-line"><b>핵심개념</b> · <span id="todayConcept"></span></div>
-      <div class="concept-line"><b>가치</b> · <span id="todayValue"></span></div>
     </div>
 
-    <div class="section-title">✅ 오늘의 실천 가이드 (5단계)</div>
-    <div class="checklist" id="checklist"></div>
-  </section>
+    <div class="scene scene-universe" id="sceneUniverse">
+      <div class="glow g1"></div>
+      <div class="glow g2"></div>
+      <div class="stars" id="starsBox"></div>
+    </div>
+  </div>
 
-  <section id="view-archive" hidden>
-    <div class="filters" id="filters"></div>
-    <div id="archiveList"></div>
-  </section>
-
-  <footer>
-    <div class="quote-final">더 나은 미래는 먼 곳이 아니라,<br>지금, 당신의 마음속에서 이미 시작되고 있습니다.</div>
-    비트코인 청산가 계산기가 궁금하다면 → <a href="btc_liq_calculator-1.html">계산기 바로가기</a>
-  </footer>
+  <div class="quote-zone">
+    <div class="quote-card">
+      <span class="badge" id="catBadge"></span>
+      <div class="quote-text" id="quoteText"></div>
+      <div class="source" id="quoteSource"></div>
+      <div class="disclaimer">※ 실제 저서·사상의 핵심 메시지를 요약·재구성한 문구입니다 (원문 발췌 아님)</div>
+    </div>
+  </div>
 </div>
 
 <script>
-/* ---------- 배경 별 ---------- */
-(function(){
-  const box = document.getElementById('stars');
-  for(let i=0;i<70;i++){
-    const s = document.createElement('span');
-    s.style.left = Math.random()*100+'%';
-    s.style.top = Math.random()*100+'%';
-    s.style.animationDelay = (Math.random()*3.5)+'s';
-    box.appendChild(s);
-  }
-})();
-
-/* ---------- 카테고리 정의 (인포그래픽 5개 관점) ---------- */
+/* ---------- 카테고리 (출처 포함) ---------- */
 const CATEGORIES = [
-  { key:'saitohitori', name:'사이토 히토리', sub:'말과 마음이 만드는 좋은 파동', color:'#E8834A',
-    concept:'좋은 파동, 운, 밝은 마음', value:'지금을 즐겁게, 가볍게' },
-  { key:'neville', name:'네빌 고다드', sub:'이미 이루어진 미래를 느껴라', color:'#D9534F',
-    concept:'상상, 감정, 의식의 법칙', value:'원하는 나로 지금 존재하기' },
-  { key:'dispenza', name:'조 디스펜자', sub:'뇌를 바꾸면 미래가 바뀐다', color:'#3E7FD1',
-    concept:'신경가소성, 명상, 양자장(비유)', value:'자신을 넘어서 새로운 나로 진화' },
-  { key:'futures', name:'미래학·심리학', sub:'원하는 미래에서 지금을 설계한다', color:'#3FA966',
-    concept:'Future-self, 계획, 선택', value:'더 나은 가능성을 현실로' },
-  { key:'quantum', name:'양자역학·시간철학', sub:'시간은 우리가 느끼는 것보다 복잡하다', color:'#6C7A96',
-    concept:'양자상태, 관측, 시간의 비선형성', value:'현실에 대한 열린 관점' },
+  { key:'saitohitori', name:'사이토 히토리', color:'#E8834A',
+    source:'사이토 히토리 · 일본의 사업가·저술가' },
+  { key:'neville', name:'네빌 고다드', color:'#D9534F',
+    source:'네빌 고다드 · 《의식의 힘 The Power of Awareness》' },
+  { key:'dispenza', name:'조 디스펜자', color:'#3E7FD1',
+    source:'조 디스펜자 · 《당신도 초자연적이 될 수 있다 Becoming Supernatural》' },
+  { key:'futures', name:'미래학·심리학', color:'#3FA966',
+    source:'미래학 · 목표설정 심리학 연구' },
+  { key:'quantum', name:'양자역학·시간철학', color:'#6C7A96',
+    source:'양자역학 · 시간철학적 관점' },
 ];
 
-/* ---------- 카테고리별 문구 (책 원문이 아닌, 개념을 담은 오리지널 문구) ---------- */
 const QUOTES_BY_CAT = {
   saitohitori:[
     '좋은 말이 좋은 미래를 데려온다.',
@@ -275,165 +244,55 @@ const QUOTES_BY_CAT = {
   ],
 };
 
-/* 카테고리를 하루씩 돌아가며 섞은 전체 문구 배열 생성(라운드로빈) */
+/* 카테고리를 하루씩 돌아가며 섞은 전체 문구 배열 (라운드로빈) */
 const QUOTES = (function(){
-  const pools = CATEGORIES.map(c => QUOTES_BY_CAT[c.key].map((t,i)=>({cat:c.key, text:t})));
+  const pools = CATEGORIES.map(c => QUOTES_BY_CAT[c.key].map(t => ({cat:c.key, text:t})));
   const max = Math.max(...pools.map(p=>p.length));
   const out = [];
-  for(let i=0;i<max;i++){
-    pools.forEach(p => { if(p[i]) out.push(p[i]); });
-  }
-  return out.map((q,idx)=>({ id: idx, cat:q.cat, text:q.text }));
+  for(let i=0;i<max;i++){ pools.forEach(p => { if(p[i]) out.push(p[i]); }); }
+  return out;
 })();
 
-const PRACTICE_STEPS = [
-  { t:'원하는 미래를 그려라', s:'마인드 무비, 비전보드' },
-  { t:'그 장면 속 감정을 지금 느껴라', s:'명상, 감사, 몰입' },
-  { t:'그 미래의 내가 오늘 무엇을 할지 1가지를 정하라', s:'' },
-  { t:'작게라도 즉시 행동하라', s:'말, 행동, 습관 변화' },
-  { t:'주기적으로 점검하고 조정하라', s:'피드백 루프' },
-];
-
-/* ---------- 날짜/저장소 유틸 ---------- */
-function pad(n){ return String(n).padStart(2,'0'); }
-function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-function dayNumber(d){ return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/86400000); }
-
+/* ---------- 날짜 계산 ---------- */
 const today = new Date();
-const todayKey = dateKey(today);
-const todayIndex = ((dayNumber(today) % QUOTES.length) + QUOTES.length) % QUOTES.length;
-const todayQuote = QUOTES[todayIndex];
+function dayNumber(d){ return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/86400000); }
+const dn = dayNumber(today);
 
-function loadJSON(key, fallback){
-  try{ const v = JSON.parse(localStorage.getItem(key)); return v ?? fallback; }catch(e){ return fallback; }
-}
-function saveJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+const todayQuote = QUOTES[((dn % QUOTES.length) + QUOTES.length) % QUOTES.length];
+const cat = CATEGORIES.find(c => c.key === todayQuote.cat);
 
-let favorites = loadJSON('mindtraining_favorites', []);
-let progress = loadJSON('mindtraining_progress', {});
-if(!progress[todayKey]) progress[todayKey] = PRACTICE_STEPS.map(()=>false);
+document.getElementById('dateTag').textContent =
+  today.getFullYear()+'년 '+(today.getMonth()+1)+'월 '+today.getDate()+'일';
 
-function toggleFavorite(id){
-  const i = favorites.indexOf(id);
-  if(i>=0) favorites.splice(i,1); else favorites.push(id);
-  saveJSON('mindtraining_favorites', favorites);
-}
+const badge = document.getElementById('catBadge');
+badge.textContent = cat.name;
+badge.style.background = cat.color;
+document.getElementById('quoteText').textContent = todayQuote.text;
+document.getElementById('quoteSource').textContent = '— ' + cat.source;
 
-function calcStreak(){
-  let streak = 0;
-  const d = new Date(today);
-  const allDone = (arr)=> arr && arr.length===PRACTICE_STEPS.length && arr.every(Boolean);
-  if(allDone(progress[dateKey(d)])){ streak = 1; }
-  d.setDate(d.getDate()-1);
-  while(true){
-    const k = dateKey(d);
-    if(allDone(progress[k])){ streak++; d.setDate(d.getDate()-1); }
-    else break;
+/* ---------- 오늘의 배경 이미지 (3일 주기: 사진 → 숲 → 우주) ---------- */
+const scenes = [
+  document.getElementById('scenePhoto'),
+  document.getElementById('sceneForest'),
+  document.getElementById('sceneUniverse'),
+];
+const sceneIndex = ((dn % 3) + 3) % 3;
+scenes[sceneIndex].classList.add('active');
+
+/* 우주 장면일 때만 별 생성 */
+if(sceneIndex === 2){
+  const box = document.getElementById('starsBox');
+  for(let i=0;i<90;i++){
+    const s = document.createElement('span');
+    const size = Math.random()*2 + 1;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3.2)+'s';
+    box.appendChild(s);
   }
-  return streak;
 }
-
-/* ---------- 렌더링: 오늘의 문구 ---------- */
-function catOf(key){ return CATEGORIES.find(c=>c.key===key); }
-
-function renderToday(){
-  const cat = catOf(todayQuote.cat);
-  document.getElementById('todayDate').textContent =
-    today.getFullYear()+'년 '+(today.getMonth()+1)+'월 '+today.getDate()+'일';
-  document.getElementById('streakBadge').textContent = '🔥 연속 ' + calcStreak() + '일째 실천 중';
-
-  const badge = document.getElementById('todayBadge');
-  badge.style.background = cat.color;
-  badge.innerHTML = cat.name + '<span class="badge-sub">' + cat.sub + '</span>';
-
-  document.getElementById('todayQuoteText').textContent = todayQuote.text;
-  document.getElementById('todayConcept').textContent = cat.concept;
-  document.getElementById('todayValue').textContent = cat.value;
-
-  const star = document.getElementById('todayStar');
-  const isFav = favorites.includes(todayQuote.id);
-  star.textContent = isFav ? '★' : '☆';
-  star.classList.toggle('active', isFav);
-  star.onclick = () => { toggleFavorite(todayQuote.id); renderToday(); };
-
-  renderChecklist();
-}
-
-function renderChecklist(){
-  const box = document.getElementById('checklist');
-  box.innerHTML = '';
-  const state = progress[todayKey];
-  PRACTICE_STEPS.forEach((step, i)=>{
-    const row = document.createElement('label');
-    row.className = 'check-item' + (state[i] ? ' done' : '');
-    row.innerHTML =
-      '<input type="checkbox" ' + (state[i] ? 'checked' : '') + '>' +
-      '<span class="lbl">' + (i+1) + '. ' + step.t + (step.s ? '<small>'+step.s+'</small>' : '') + '</span>';
-    row.querySelector('input').addEventListener('change', (e)=>{
-      state[i] = e.target.checked;
-      saveJSON('mindtraining_progress', progress);
-      renderToday();
-    });
-    box.appendChild(row);
-  });
-}
-
-/* ---------- 렌더링: 전체 보기 ---------- */
-let activeFilter = 'all';
-
-function renderFilters(){
-  const box = document.getElementById('filters');
-  const opts = [{key:'all', name:'전체'}, ...CATEGORIES, {key:'fav', name:'★ 즐겨찾기'}];
-  box.innerHTML = '';
-  opts.forEach(o=>{
-    const btn = document.createElement('button');
-    btn.textContent = o.name;
-    btn.className = activeFilter === o.key ? 'active' : '';
-    btn.onclick = ()=>{ activeFilter = o.key; renderArchive(); };
-    box.appendChild(btn);
-  });
-}
-
-function renderArchive(){
-  renderFilters();
-  const list = document.getElementById('archiveList');
-  list.innerHTML = '';
-  let items = QUOTES;
-  if(activeFilter === 'fav') items = QUOTES.filter(q=>favorites.includes(q.id));
-  else if(activeFilter !== 'all') items = QUOTES.filter(q=>q.cat===activeFilter);
-
-  if(items.length === 0){
-    list.innerHTML = '<div class="concept-line" style="text-align:center;padding:20px 0;">표시할 문구가 없습니다.</div>';
-    return;
-  }
-
-  items.forEach(q=>{
-    const cat = catOf(q.cat);
-    const row = document.createElement('div');
-    row.className = 'list-item' + (q.id === todayQuote.id ? ' today' : '');
-    row.style.borderLeftColor = cat.color;
-    const isFav = favorites.includes(q.id);
-    row.innerHTML =
-      '<div class="txt">' + q.text + '<div class="cat">' + cat.name + (q.id===todayQuote.id ? ' · 오늘의 문구' : '') + '</div></div>' +
-      '<button class="star-btn ' + (isFav?'active':'') + '" style="font-size:1.1rem;">' + (isFav?'★':'☆') + '</button>';
-    row.querySelector('button').onclick = ()=>{ toggleFavorite(q.id); renderArchive(); };
-    list.appendChild(row);
-  });
-}
-
-/* ---------- 탭 전환 ---------- */
-document.querySelectorAll('.tabs button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const view = btn.dataset.view;
-    document.getElementById('view-today').hidden = view !== 'today';
-    document.getElementById('view-archive').hidden = view !== 'archive';
-    if(view === 'archive') renderArchive();
-  });
-});
-
-renderToday();
 </script>
 </body>
 </html>
