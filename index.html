@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘의 마음훈련 - 미래가 현재를 바꾸는 문구</title>
+<style>
+  :root{
+    --bg-top:#0b1030;
+    --bg-bottom:#1b2454;
+    --card-bg:rgba(255,255,255,0.06);
+    --card-border:rgba(255,255,255,0.14);
+    --text-main:#f4f5fb;
+    --text-sub:#b9bfe0;
+    --accent:#ffd76a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:radial-gradient(ellipse at top, var(--bg-bottom), var(--bg-top) 70%);
+    color:var(--text-main);
+    font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    display:flex;
+    justify-content:center;
+    padding:24px 12px 60px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  #stars span{
+    position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
+    opacity:.5;animation:twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:.9;}}
+
+  .app{position:relative;z-index:1;width:100%;max-width:480px;}
+
+  header{text-align:center;margin-bottom:14px;}
+  header h1{font-size:1.3rem;margin:0 0 4px;font-weight:700;letter-spacing:-0.02em;}
+  header .date{color:var(--text-sub);font-size:.85rem;}
+  .streak{
+    display:inline-flex;align-items:center;gap:6px;margin-top:10px;
+    background:rgba(255,215,106,0.12);border:1px solid rgba(255,215,106,0.35);
+    color:var(--accent);padding:5px 14px;border-radius:999px;font-size:.82rem;font-weight:600;
+  }
+
+  .tabs{display:flex;gap:8px;margin:18px 0 14px;}
+  .tabs button{
+    flex:1;padding:10px 0;border-radius:12px;border:1px solid var(--card-border);
+    background:var(--card-bg);color:var(--text-sub);font-size:.9rem;font-weight:600;
+    cursor:pointer;transition:.15s;
+  }
+  .tabs button.active{background:var(--accent);color:#22262f;border-color:var(--accent);}
+
+  .card{
+    background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;
+    padding:22px 20px;backdrop-filter:blur(6px);margin-bottom:16px;
+  }
+
+  .badge{
+    display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:700;
+    color:#fff;margin-bottom:14px;
+  }
+  .badge-sub{display:block;font-size:.7rem;font-weight:500;opacity:.85;margin-top:2px;}
+
+  .quote-text{
+    font-size:1.28rem;line-height:1.55;font-weight:600;margin:6px 0 16px;position:relative;padding:0 6px;
+  }
+  .quote-text::before{content:"“";font-size:1.4em;color:var(--accent);margin-right:2px;vertical-align:-0.15em;}
+  .quote-text::after{content:"”";font-size:1.4em;color:var(--accent);margin-left:2px;vertical-align:-0.5em;}
+
+  .concept-line{color:var(--text-sub);font-size:.82rem;margin-bottom:2px;}
+  .concept-line b{color:var(--text-main);}
+
+  .card-top-row{display:flex;justify-content:space-between;align-items:flex-start;}
+  .star-btn{background:none;border:none;color:var(--text-sub);font-size:1.3rem;cursor:pointer;line-height:1;padding:2px 4px;}
+  .star-btn.active{color:var(--accent);}
+
+  .section-title{font-size:.95rem;font-weight:700;margin:22px 0 10px 2px;color:var(--text-main);}
+  .checklist{display:flex;flex-direction:column;gap:8px;}
+  .check-item{
+    display:flex;align-items:flex-start;gap:10px;background:var(--card-bg);
+    border:1px solid var(--card-border);border-radius:12px;padding:10px 12px;cursor:pointer;
+  }
+  .check-item input{margin-top:3px;width:16px;height:16px;accent-color:var(--accent);flex:none;}
+  .check-item .lbl{font-size:.86rem;line-height:1.4;}
+  .check-item .lbl small{display:block;color:var(--text-sub);font-size:.74rem;margin-top:1px;}
+  .check-item.done .lbl{color:var(--text-sub);text-decoration:line-through;}
+
+  .filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .filters button{
+    padding:6px 12px;border-radius:999px;border:1px solid var(--card-border);background:var(--card-bg);
+    color:var(--text-sub);font-size:.76rem;cursor:pointer;
+  }
+  .filters button.active{background:#fff;color:#111;border-color:#fff;}
+
+  .list-item{
+    border:1px solid var(--card-border);border-left-width:4px;border-radius:10px;
+    padding:10px 12px;margin-bottom:8px;background:var(--card-bg);display:flex;justify-content:space-between;gap:10px;
+  }
+  .list-item.today{outline:2px solid var(--accent);}
+  .list-item .txt{font-size:.86rem;line-height:1.45;}
+  .list-item .cat{font-size:.68rem;color:var(--text-sub);margin-top:3px;}
+
+  footer{margin-top:28px;text-align:center;color:var(--text-sub);font-size:.78rem;line-height:1.7;}
+  footer .quote-final{color:var(--text-main);font-weight:600;font-size:.86rem;margin-bottom:10px;}
+  footer a{color:var(--accent);text-decoration:none;}
+
+  [hidden]{display:none!important;}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div class="app">
+  <header>
+    <h1>🌌 오늘의 마음훈련</h1>
+    <div class="date" id="todayDate"></div>
+    <div class="streak" id="streakBadge">🔥 연속 0일째 실천 중</div>
+  </header>
+
+  <nav class="tabs">
+    <button data-view="today" class="active">오늘의 문구</button>
+    <button data-view="archive">전체 보기</button>
+  </nav>
+
+  <section id="view-today">
+    <div class="card">
+      <div class="card-top-row">
+        <div>
+          <span class="badge" id="todayBadge"></span>
+        </div>
+        <button class="star-btn" id="todayStar" title="즐겨찾기">☆</button>
+      </div>
+      <div class="quote-text" id="todayQuoteText"></div>
+      <div class="concept-line"><b>핵심개념</b> · <span id="todayConcept"></span></div>
+      <div class="concept-line"><b>가치</b> · <span id="todayValue"></span></div>
+    </div>
+
+    <div class="section-title">✅ 오늘의 실천 가이드 (5단계)</div>
+    <div class="checklist" id="checklist"></div>
+  </section>
+
+  <section id="view-archive" hidden>
+    <div class="filters" id="filters"></div>
+    <div id="archiveList"></div>
+  </section>
+
+  <footer>
+    <div class="quote-final">더 나은 미래는 먼 곳이 아니라,<br>지금, 당신의 마음속에서 이미 시작되고 있습니다.</div>
+    비트코인 청산가 계산기가 궁금하다면 → <a href="btc_liq_calculator-1.html">계산기 바로가기</a>
+  </footer>
+</div>
+
+<script>
+/* ---------- 배경 별 ---------- */
+(function(){
+  const box = document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3.5)+'s';
+    box.appendChild(s);
+  }
+})();
+
+/* ---------- 카테고리 정의 (인포그래픽 5개 관점) ---------- */
+const CATEGORIES = [
+  { key:'saitohitori', name:'사이토 히토리', sub:'말과 마음이 만드는 좋은 파동', color:'#E8834A',
+    concept:'좋은 파동, 운, 밝은 마음', value:'지금을 즐겁게, 가볍게' },
+  { key:'neville', name:'네빌 고다드', sub:'이미 이루어진 미래를 느껴라', color:'#D9534F',
+    concept:'상상, 감정, 의식의 법칙', value:'원하는 나로 지금 존재하기' },
+  { key:'dispenza', name:'조 디스펜자', sub:'뇌를 바꾸면 미래가 바뀐다', color:'#3E7FD1',
+    concept:'신경가소성, 명상, 양자장(비유)', value:'자신을 넘어서 새로운 나로 진화' },
+  { key:'futures', name:'미래학·심리학', sub:'원하는 미래에서 지금을 설계한다', color:'#3FA966',
+    concept:'Future-self, 계획, 선택', value:'더 나은 가능성을 현실로' },
+  { key:'quantum', name:'양자역학·시간철학', sub:'시간은 우리가 느끼는 것보다 복잡하다', color:'#6C7A96',
+    concept:'양자상태, 관측, 시간의 비선형성', value:'현실에 대한 열린 관점' },
+];
+
+/* ---------- 카테고리별 문구 (책 원문이 아닌, 개념을 담은 오리지널 문구) ---------- */
+const QUOTES_BY_CAT = {
+  saitohitori:[
+    '좋은 말이 좋은 미래를 데려온다.',
+    '당신이 뱉는 말은 마음을 지나 현실이 되어 돌아온다.',
+    '웃는 얼굴에는 좋은 일이 끌려온다.',
+    '지금 이 순간을 즐겁고 가볍게 사는 것이 운을 부르는 첫걸음이다.',
+    '불평 대신 감사를 말하는 순간, 마음의 파동이 바뀐다.',
+    '마음이 밝으면 길이 밝아진다.',
+    '말버릇을 바꾸면 인생의 버릇이 바뀐다.',
+    '행복해서 웃는 게 아니라, 웃어서 행복해지는 것이다.',
+    '좋은 파동은 좋은 사람과 좋은 기회를 끌어당긴다.',
+    '오늘도 감사합니다, 라는 한마디가 내일을 바꾼다.',
+    '무거운 마음으로는 가벼운 미래에 닿을 수 없다.',
+    '운이 좋다고 말하는 사람 주위에 운이 모인다.',
+    '작은 친절의 말 한마디가 큰 인연을 만든다.',
+    '부정적인 말은 불행을 부르고, 긍정적인 말은 행복을 부른다.',
+    '지금 내가 하는 말이 곧 내일의 나를 만든다.',
+    '밝은 마음은 전염된다, 나부터 밝아지자.',
+  ],
+  neville:[
+    '상상 속의 현실이 결국 현실이 된다.',
+    '이미 원하는 것을 이룬 사람처럼 느껴보라.',
+    '느낌이야말로 소원을 현실로 만드는 열쇠다.',
+    '잠들기 전 5분, 이루어진 미래의 장면 속에 머물러라.',
+    '의식이 원인이고, 현실은 그 결과일 뿐이다.',
+    '원하는 가정(假定)이 사실이 될 때까지 그 안에 살아라.',
+    '지금의 나를 넘어 원하는 나로 존재하라.',
+    '상상은 창조의 시작이며, 감정은 그것을 완성한다.',
+    '이루어졌다고 느끼는 순간, 이미 절반은 이루어진 것이다.',
+    '당신의 상상력이 곧 미래를 짓는 건축가다.',
+    '현재의 조건이 아니라 원하는 결말을 상상하라.',
+    '믿음은 보이지 않는 것을 보이게 만드는 힘이다.',
+    '간절히 바라는 장면을 생생히 그리고, 그 안에서 미리 감사하라.',
+    '외부 세계는 내면 세계를 비추는 거울일 뿐이다.',
+    '오늘 밤 그리는 상상이 내일의 현실을 조각한다.',
+    '원하는 나로 지금 존재하는 것, 그것이 소원 성취의 전부다.',
+  ],
+  dispenza:[
+    '변화는 과학적으로 가능하다.',
+    '매일 같은 생각을 하면 어제와 똑같은 오늘을 살게 된다.',
+    '명상은 익숙한 나를 넘어서는 훈련이다.',
+    '새로운 경험을 생생히 상상하면 뇌는 새로운 회로를 만든다.',
+    '몸이 마음보다 먼저 과거에 반응하지 않도록 깨어있으라.',
+    '감정은 과거의 기억이 아니라, 미래를 향한 신호가 될 수 있다.',
+    '생각을 반복하면 신경회로가 되고, 신경회로는 습관이 된다.',
+    '가장 큰 장벽은 다름 아닌 익숙한 나 자신이다.',
+    '새로운 내가 되려면 새로운 방식으로 생각하고 느껴야 한다.',
+    '뇌는 실제 경험과 생생한 상상을 완전히 구별하지 못한다.',
+    '매일 잠깐의 명상이 뇌의 배선을 조금씩 바꾼다.',
+    '미래의 나를 미리 살아보는 연습이 오늘을 바꾼다.',
+    '신경가소성은 나이와 상관없이 평생 작동한다.',
+    '고요한 마음에서 진짜 변화가 시작된다.',
+    '익숙한 감정의 습관에서 벗어나면 새로운 가능성이 열린다.',
+    '오늘 내가 느끼는 감정이 내일 끌어당길 현실의 씨앗이다.',
+  ],
+  futures:[
+    '원하는 미래를 구체적으로 그리면, 오늘의 선택이 달라진다.',
+    '미래의 나(Future-self)와 대화하는 사람이 더 나은 결정을 내린다.',
+    '백캐스팅: 도착점에서 거꾸로 오늘 할 일을 찾아라.',
+    '계획은 꿈을 현실로 옮기는 다리다.',
+    '더 나은 가능성을 현실로 만드는 것은 선택의 반복이다.',
+    '목표를 세우는 순간, 뇌는 그것을 찾기 시작한다.',
+    '구체적인 계획이 없는 꿈은 소원으로만 남는다.',
+    '자기충족적 예언: 믿는 대로 행동하면, 행동한 대로 이루어진다.',
+    'MCII: 원하는 미래와 그 앞의 장벽을 함께 그려보라.',
+    '오늘 내리는 작은 결정이 5년 뒤의 나를 만든다.',
+    '미래는 예측하는 것이 아니라 설계하는 것이다.',
+    '여러 가능한 미래 중 하나를 고르는 것은 바로 지금의 나다.',
+    '원하는 정체성을 먼저 정하면, 행동은 자연히 따라온다.',
+    '작은 목표의 달성이 큰 목표에 대한 확신을 만든다.',
+    '오늘의 계획표는 미래의 자서전 첫 페이지다.',
+    '선택할 수 있다는 사실 자체가 가장 큰 가능성이다.',
+  ],
+  quantum:[
+    '시간은 직선이 아닐 수 있다. 현실은 하나가 아니다.',
+    '관측하는 순간, 여러 가능성은 하나의 현실로 좁혀진다.',
+    '현실은 고정된 것이 아니라, 가능성으로 가득한 장(場)이다.',
+    '과거·현재·미래가 공존할 수 있다는 관점이 선택의 폭을 넓힌다.',
+    '무엇에 주의를 기울이는가가 어떤 현실을 보게 될지 결정한다.',
+    '수많은 가능성 속에서, 우리는 매 순간 하나의 현실을 선택하고 있다.',
+    '시간에 대한 열린 관점이 마음의 유연함을 만든다.',
+    '지금 이 순간이 다른 미래의 시작점이다.',
+    '고정관념을 내려놓을 때, 새로운 가능성이 보이기 시작한다.',
+    '현실의 어려움을 무시한 낙관은 역효과를 내지만, 가능성을 믿는 마음은 다르다.',
+    '보는 관점이 바뀌면 다가오는 현실도 달라진다.',
+    '여러 가능성이 겹쳐 있는 지금, 어떤 미래에 집중할지는 나의 몫이다.',
+    '비선형적 시간관은 후회보다 다음 선택에 집중하게 한다.',
+    '작은 세계의 불확정성은 삶에도 열린 태도를 가르쳐준다.',
+    '확실한 미래는 없다, 다만 더 가능성 높은 미래가 있을 뿐이다.',
+    '지금의 마음가짐이 내가 관측할 현실의 렌즈를 결정한다.',
+  ],
+};
+
+/* 카테고리를 하루씩 돌아가며 섞은 전체 문구 배열 생성(라운드로빈) */
+const QUOTES = (function(){
+  const pools = CATEGORIES.map(c => QUOTES_BY_CAT[c.key].map((t,i)=>({cat:c.key, text:t})));
+  const max = Math.max(...pools.map(p=>p.length));
+  const out = [];
+  for(let i=0;i<max;i++){
+    pools.forEach(p => { if(p[i]) out.push(p[i]); });
+  }
+  return out.map((q,idx)=>({ id: idx, cat:q.cat, text:q.text }));
+})();
+
+const PRACTICE_STEPS = [
+  { t:'원하는 미래를 그려라', s:'마인드 무비, 비전보드' },
+  { t:'그 장면 속 감정을 지금 느껴라', s:'명상, 감사, 몰입' },
+  { t:'그 미래의 내가 오늘 무엇을 할지 1가지를 정하라', s:'' },
+  { t:'작게라도 즉시 행동하라', s:'말, 행동, 습관 변화' },
+  { t:'주기적으로 점검하고 조정하라', s:'피드백 루프' },
+];
+
+/* ---------- 날짜/저장소 유틸 ---------- */
+function pad(n){ return String(n).padStart(2,'0'); }
+function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function dayNumber(d){ return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/86400000); }
+
+const today = new Date();
+const todayKey = dateKey(today);
+const todayIndex = ((dayNumber(today) % QUOTES.length) + QUOTES.length) % QUOTES.length;
+const todayQuote = QUOTES[todayIndex];
+
+function loadJSON(key, fallback){
+  try{ const v = JSON.parse(localStorage.getItem(key)); return v ?? fallback; }catch(e){ return fallback; }
+}
+function saveJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+let favorites = loadJSON('mindtraining_favorites', []);
+let progress = loadJSON('mindtraining_progress', {});
+if(!progress[todayKey]) progress[todayKey] = PRACTICE_STEPS.map(()=>false);
+
+function toggleFavorite(id){
+  const i = favorites.indexOf(id);
+  if(i>=0) favorites.splice(i,1); else favorites.push(id);
+  saveJSON('mindtraining_favorites', favorites);
+}
+
+function calcStreak(){
+  let streak = 0;
+  const d = new Date(today);
+  const allDone = (arr)=> arr && arr.length===PRACTICE_STEPS.length && arr.every(Boolean);
+  if(allDone(progress[dateKey(d)])){ streak = 1; }
+  d.setDate(d.getDate()-1);
+  while(true){
+    const k = dateKey(d);
+    if(allDone(progress[k])){ streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+/* ---------- 렌더링: 오늘의 문구 ---------- */
+function catOf(key){ return CATEGORIES.find(c=>c.key===key); }
+
+function renderToday(){
+  const cat = catOf(todayQuote.cat);
+  document.getElementById('todayDate').textContent =
+    today.getFullYear()+'년 '+(today.getMonth()+1)+'월 '+today.getDate()+'일';
+  document.getElementById('streakBadge').textContent = '🔥 연속 ' + calcStreak() + '일째 실천 중';
+
+  const badge = document.getElementById('todayBadge');
+  badge.style.background = cat.color;
+  badge.innerHTML = cat.name + '<span class="badge-sub">' + cat.sub + '</span>';
+
+  document.getElementById('todayQuoteText').textContent = todayQuote.text;
+  document.getElementById('todayConcept').textContent = cat.concept;
+  document.getElementById('todayValue').textContent = cat.value;
+
+  const star = document.getElementById('todayStar');
+  const isFav = favorites.includes(todayQuote.id);
+  star.textContent = isFav ? '★' : '☆';
+  star.classList.toggle('active', isFav);
+  star.onclick = () => { toggleFavorite(todayQuote.id); renderToday(); };
+
+  renderChecklist();
+}
+
+function renderChecklist(){
+  const box = document.getElementById('checklist');
+  box.innerHTML = '';
+  const state = progress[todayKey];
+  PRACTICE_STEPS.forEach((step, i)=>{
+    const row = document.createElement('label');
+    row.className = 'check-item' + (state[i] ? ' done' : '');
+    row.innerHTML =
+      '<input type="checkbox" ' + (state[i] ? 'checked' : '') + '>' +
+      '<span class="lbl">' + (i+1) + '. ' + step.t + (step.s ? '<small>'+step.s+'</small>' : '') + '</span>';
+    row.querySelector('input').addEventListener('change', (e)=>{
+      state[i] = e.target.checked;
+      saveJSON('mindtraining_progress', progress);
+      renderToday();
+    });
+    box.appendChild(row);
+  });
+}
+
+/* ---------- 렌더링: 전체 보기 ---------- */
+let activeFilter = 'all';
+
+function renderFilters(){
+  const box = document.getElementById('filters');
+  const opts = [{key:'all', name:'전체'}, ...CATEGORIES, {key:'fav', name:'★ 즐겨찾기'}];
+  box.innerHTML = '';
+  opts.forEach(o=>{
+    const btn = document.createElement('button');
+    btn.textContent = o.name;
+    btn.className = activeFilter === o.key ? 'active' : '';
+    btn.onclick = ()=>{ activeFilter = o.key; renderArchive(); };
+    box.appendChild(btn);
+  });
+}
+
+function renderArchive(){
+  renderFilters();
+  const list = document.getElementById('archiveList');
+  list.innerHTML = '';
+  let items = QUOTES;
+  if(activeFilter === 'fav') items = QUOTES.filter(q=>favorites.includes(q.id));
+  else if(activeFilter !== 'all') items = QUOTES.filter(q=>q.cat===activeFilter);
+
+  if(items.length === 0){
+    list.innerHTML = '<div class="concept-line" style="text-align:center;padding:20px 0;">표시할 문구가 없습니다.</div>';
+    return;
+  }
+
+  items.forEach(q=>{
+    const cat = catOf(q.cat);
+    const row = document.createElement('div');
+    row.className = 'list-item' + (q.id === todayQuote.id ? ' today' : '');
+    row.style.borderLeftColor = cat.color;
+    const isFav = favorites.includes(q.id);
+    row.innerHTML =
+      '<div class="txt">' + q.text + '<div class="cat">' + cat.name + (q.id===todayQuote.id ? ' · 오늘의 문구' : '') + '</div></div>' +
+      '<button class="star-btn ' + (isFav?'active':'') + '" style="font-size:1.1rem;">' + (isFav?'★':'☆') + '</button>';
+    row.querySelector('button').onclick = ()=>{ toggleFavorite(q.id); renderArchive(); };
+    list.appendChild(row);
+  });
+}
+
+/* ---------- 탭 전환 ---------- */
+document.querySelectorAll('.tabs button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const view = btn.dataset.view;
+    document.getElementById('view-today').hidden = view !== 'today';
+    document.getElementById('view-archive').hidden = view !== 'archive';
+    if(view === 'archive') renderArchive();
+  });
+});
+
+renderToday();
+</script>
+</body>
+</html>
