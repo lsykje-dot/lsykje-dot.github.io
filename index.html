@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘의 마음훈련 대시보드</title>
+<style>
+  :root{
+    --panel-bg:#0b1030;
+    --panel-bg2:#161c46;
+    --text-main:#f4f5fb;
+    --text-sub:#aab0d6;
+    --accent:#ffd76a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    background:var(--panel-bg);
+    color:var(--text-main);
+  }
+
+  .stage{min-height:100vh;display:flex;flex-direction:column;}
+
+  /* ---------- 상단 2/3 : 이미지 영역 ---------- */
+  .image-zone{
+    flex:2 1 0;position:relative;overflow:hidden;min-height:280px;
+  }
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .4s;}
+  .scene.active{opacity:1;}
+
+  .scene-photo{background:#111 center/cover no-repeat;}
+  .scene-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%);
+  }
+
+  .scene-forest{background:linear-gradient(180deg,#cfe9ff 0%,#ffe9b8 50%,#ffcf7a 72%,#284a2b 100%);}
+  .scene-forest .sun{
+    position:absolute;top:16%;left:50%;transform:translate(-50%,-50%);
+    width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle,#fffbe0 0%,#ffe07a 45%,rgba(255,224,122,0) 72%);
+    box-shadow:0 0 130px 65px rgba(255,224,122,.5);
+  }
+  .scene-forest .rays{
+    position:absolute;inset:0;mix-blend-mode:screen;opacity:.55;
+    background:repeating-conic-gradient(from 0deg at 50% 18%, rgba(255,255,255,.22) 0deg 3deg, transparent 3deg 13deg);
+  }
+  .scene-forest .trees{position:absolute;left:0;right:0;bottom:0;height:48%;}
+  .scene-forest .trees svg{width:100%;height:100%;display:block;}
+  .scene-forest .mist{
+    position:absolute;left:0;right:0;bottom:30%;height:20%;
+    background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0));
+    filter:blur(6px);
+  }
+
+  .scene-universe{background:radial-gradient(ellipse at 50% 28%,#2c1c58 0%,#0d1338 55%,#05061a 100%);}
+  .scene-universe .glow{
+    position:absolute;border-radius:50%;filter:blur(30px);opacity:.55;
+  }
+  .scene-universe .glow.g1{width:220px;height:220px;background:#6a4fd6;top:8%;left:8%;}
+  .scene-universe .glow.g2{width:260px;height:260px;background:#3d6ad6;bottom:6%;right:6%;}
+  .scene-universe .stars span{
+    position:absolute;background:#fff;border-radius:50%;
+    animation:twinkle 3.2s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.2;}50%{opacity:1;}}
+
+  .date-tag{
+    position:absolute;top:14px;left:16px;z-index:2;
+    background:rgba(0,0,0,.35);backdrop-filter:blur(3px);
+    padding:6px 14px;border-radius:999px;font-size:.78rem;color:#fff;
+  }
+
+  /* ---------- 하단 1/3 : 문구 영역 ---------- */
+  .quote-zone{
+    flex:1 1 0;min-height:220px;background:var(--panel-bg2);
+    display:flex;align-items:center;justify-content:center;
+    padding:22px 18px;overflow-y:auto;
+  }
+  .quote-card{max-width:560px;width:100%;}
+  .badge{
+    display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:700;color:#fff;margin-bottom:12px;
+  }
+  .quote-text{
+    font-size:1.3rem;line-height:1.55;font-weight:600;margin:0 0 14px;position:relative;
+  }
+  .quote-text::before{content:"“";color:var(--accent);margin-right:2px;}
+  .quote-text::after{content:"”";color:var(--accent);margin-left:2px;}
+  .source{color:var(--text-sub);font-size:.86rem;margin-bottom:6px;}
+  .disclaimer{color:var(--text-sub);font-size:.72rem;opacity:.75;}
+
+  [hidden]{display:none!important;}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="image-zone" id="imageZone">
+    <div class="date-tag" id="dateTag"></div>
+
+    <div class="scene scene-photo" id="scenePhoto" style="background-image:url('assets/day-photo.png');"></div>
+
+    <div class="scene scene-forest" id="sceneForest">
+      <div class="rays"></div>
+      <div class="sun"></div>
+      <div class="mist"></div>
+      <div class="trees">
+        <svg viewBox="0 0 400 140" preserveAspectRatio="none">
+          <polygon points="30,140 55,60 80,140" fill="#1f3a20"/>
+          <polygon points="70,140 100,40 130,140" fill="#22401f"/>
+          <polygon points="115,140 145,70 175,140" fill="#1c3618"/>
+          <polygon points="160,140 195,35 230,140" fill="#254a22"/>
+          <polygon points="210,140 240,65 270,140" fill="#1e3a1c"/>
+          <polygon points="250,140 285,30 320,140" fill="#274d24"/>
+          <polygon points="300,140 330,60 360,140" fill="#1c3a1a"/>
+          <polygon points="340,140 375,45 400,140" fill="#22401f"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="scene scene-universe" id="sceneUniverse">
+      <div class="glow g1"></div>
+      <div class="glow g2"></div>
+      <div class="stars" id="starsBox"></div>
+    </div>
+  </div>
+
+  <div class="quote-zone">
+    <div class="quote-card">
+      <span class="badge" id="catBadge"></span>
+      <div class="quote-text" id="quoteText"></div>
+      <div class="source" id="quoteSource"></div>
+      <div class="disclaimer">※ 실제 저서·사상의 핵심 메시지를 요약·재구성한 문구입니다 (원문 발췌 아님)</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- 카테고리 (출처 포함) ---------- */
+const CATEGORIES = [
+  { key:'saitohitori', name:'사이토 히토리', color:'#E8834A',
+    source:'사이토 히토리 · 일본의 사업가·저술가' },
+  { key:'neville', name:'네빌 고다드', color:'#D9534F',
+    source:'네빌 고다드 · 《의식의 힘 The Power of Awareness》' },
+  { key:'dispenza', name:'조 디스펜자', color:'#3E7FD1',
+    source:'조 디스펜자 · 《당신도 초자연적이 될 수 있다 Becoming Supernatural》' },
+  { key:'futures', name:'미래학·심리학', color:'#3FA966',
+    source:'미래학 · 목표설정 심리학 연구' },
+  { key:'quantum', name:'양자역학·시간철학', color:'#6C7A96',
+    source:'양자역학 · 시간철학적 관점' },
+];
+
+const QUOTES_BY_CAT = {
+  saitohitori:[
+    '좋은 말이 좋은 미래를 데려온다.',
+    '당신이 뱉는 말은 마음을 지나 현실이 되어 돌아온다.',
+    '웃는 얼굴에는 좋은 일이 끌려온다.',
+    '지금 이 순간을 즐겁고 가볍게 사는 것이 운을 부르는 첫걸음이다.',
+    '불평 대신 감사를 말하는 순간, 마음의 파동이 바뀐다.',
+    '마음이 밝으면 길이 밝아진다.',
+    '말버릇을 바꾸면 인생의 버릇이 바뀐다.',
+    '행복해서 웃는 게 아니라, 웃어서 행복해지는 것이다.',
+    '좋은 파동은 좋은 사람과 좋은 기회를 끌어당긴다.',
+    '오늘도 감사합니다, 라는 한마디가 내일을 바꾼다.',
+    '무거운 마음으로는 가벼운 미래에 닿을 수 없다.',
+    '운이 좋다고 말하는 사람 주위에 운이 모인다.',
+    '작은 친절의 말 한마디가 큰 인연을 만든다.',
+    '부정적인 말은 불행을 부르고, 긍정적인 말은 행복을 부른다.',
+    '지금 내가 하는 말이 곧 내일의 나를 만든다.',
+    '밝은 마음은 전염된다, 나부터 밝아지자.',
+  ],
+  neville:[
+    '상상 속의 현실이 결국 현실이 된다.',
+    '이미 원하는 것을 이룬 사람처럼 느껴보라.',
+    '느낌이야말로 소원을 현실로 만드는 열쇠다.',
+    '잠들기 전 5분, 이루어진 미래의 장면 속에 머물러라.',
+    '의식이 원인이고, 현실은 그 결과일 뿐이다.',
+    '원하는 가정(假定)이 사실이 될 때까지 그 안에 살아라.',
+    '지금의 나를 넘어 원하는 나로 존재하라.',
+    '상상은 창조의 시작이며, 감정은 그것을 완성한다.',
+    '이루어졌다고 느끼는 순간, 이미 절반은 이루어진 것이다.',
+    '당신의 상상력이 곧 미래를 짓는 건축가다.',
+    '현재의 조건이 아니라 원하는 결말을 상상하라.',
+    '믿음은 보이지 않는 것을 보이게 만드는 힘이다.',
+    '간절히 바라는 장면을 생생히 그리고, 그 안에서 미리 감사하라.',
+    '외부 세계는 내면 세계를 비추는 거울일 뿐이다.',
+    '오늘 밤 그리는 상상이 내일의 현실을 조각한다.',
+    '원하는 나로 지금 존재하는 것, 그것이 소원 성취의 전부다.',
+  ],
+  dispenza:[
+    '변화는 과학적으로 가능하다.',
+    '매일 같은 생각을 하면 어제와 똑같은 오늘을 살게 된다.',
+    '명상은 익숙한 나를 넘어서는 훈련이다.',
+    '새로운 경험을 생생히 상상하면 뇌는 새로운 회로를 만든다.',
+    '몸이 마음보다 먼저 과거에 반응하지 않도록 깨어있으라.',
+    '감정은 과거의 기억이 아니라, 미래를 향한 신호가 될 수 있다.',
+    '생각을 반복하면 신경회로가 되고, 신경회로는 습관이 된다.',
+    '가장 큰 장벽은 다름 아닌 익숙한 나 자신이다.',
+    '새로운 내가 되려면 새로운 방식으로 생각하고 느껴야 한다.',
+    '뇌는 실제 경험과 생생한 상상을 완전히 구별하지 못한다.',
+    '매일 잠깐의 명상이 뇌의 배선을 조금씩 바꾼다.',
+    '미래의 나를 미리 살아보는 연습이 오늘을 바꾼다.',
+    '신경가소성은 나이와 상관없이 평생 작동한다.',
+    '고요한 마음에서 진짜 변화가 시작된다.',
+    '익숙한 감정의 습관에서 벗어나면 새로운 가능성이 열린다.',
+    '오늘 내가 느끼는 감정이 내일 끌어당길 현실의 씨앗이다.',
+  ],
+  futures:[
+    '원하는 미래를 구체적으로 그리면, 오늘의 선택이 달라진다.',
+    '미래의 나(Future-self)와 대화하는 사람이 더 나은 결정을 내린다.',
+    '백캐스팅: 도착점에서 거꾸로 오늘 할 일을 찾아라.',
+    '계획은 꿈을 현실로 옮기는 다리다.',
+    '더 나은 가능성을 현실로 만드는 것은 선택의 반복이다.',
+    '목표를 세우는 순간, 뇌는 그것을 찾기 시작한다.',
+    '구체적인 계획이 없는 꿈은 소원으로만 남는다.',
+    '자기충족적 예언: 믿는 대로 행동하면, 행동한 대로 이루어진다.',
+    'MCII: 원하는 미래와 그 앞의 장벽을 함께 그려보라.',
+    '오늘 내리는 작은 결정이 5년 뒤의 나를 만든다.',
+    '미래는 예측하는 것이 아니라 설계하는 것이다.',
+    '여러 가능한 미래 중 하나를 고르는 것은 바로 지금의 나다.',
+    '원하는 정체성을 먼저 정하면, 행동은 자연히 따라온다.',
+    '작은 목표의 달성이 큰 목표에 대한 확신을 만든다.',
+    '오늘의 계획표는 미래의 자서전 첫 페이지다.',
+    '선택할 수 있다는 사실 자체가 가장 큰 가능성이다.',
+  ],
+  quantum:[
+    '시간은 직선이 아닐 수 있다. 현실은 하나가 아니다.',
+    '관측하는 순간, 여러 가능성은 하나의 현실로 좁혀진다.',
+    '현실은 고정된 것이 아니라, 가능성으로 가득한 장(場)이다.',
+    '과거·현재·미래가 공존할 수 있다는 관점이 선택의 폭을 넓힌다.',
+    '무엇에 주의를 기울이는가가 어떤 현실을 보게 될지 결정한다.',
+    '수많은 가능성 속에서, 우리는 매 순간 하나의 현실을 선택하고 있다.',
+    '시간에 대한 열린 관점이 마음의 유연함을 만든다.',
+    '지금 이 순간이 다른 미래의 시작점이다.',
+    '고정관념을 내려놓을 때, 새로운 가능성이 보이기 시작한다.',
+    '현실의 어려움을 무시한 낙관은 역효과를 내지만, 가능성을 믿는 마음은 다르다.',
+    '보는 관점이 바뀌면 다가오는 현실도 달라진다.',
+    '여러 가능성이 겹쳐 있는 지금, 어떤 미래에 집중할지는 나의 몫이다.',
+    '비선형적 시간관은 후회보다 다음 선택에 집중하게 한다.',
+    '작은 세계의 불확정성은 삶에도 열린 태도를 가르쳐준다.',
+    '확실한 미래는 없다, 다만 더 가능성 높은 미래가 있을 뿐이다.',
+    '지금의 마음가짐이 내가 관측할 현실의 렌즈를 결정한다.',
+  ],
+};
+
+/* 카테고리를 하루씩 돌아가며 섞은 전체 문구 배열 (라운드로빈) */
+const QUOTES = (function(){
+  const pools = CATEGORIES.map(c => QUOTES_BY_CAT[c.key].map(t => ({cat:c.key, text:t})));
+  const max = Math.max(...pools.map(p=>p.length));
+  const out = [];
+  for(let i=0;i<max;i++){ pools.forEach(p => { if(p[i]) out.push(p[i]); }); }
+  return out;
+})();
+
+/* ---------- 날짜 계산 ---------- */
+const today = new Date();
+function dayNumber(d){ return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/86400000); }
+const dn = dayNumber(today);
+
+const todayQuote = QUOTES[((dn % QUOTES.length) + QUOTES.length) % QUOTES.length];
+const cat = CATEGORIES.find(c => c.key === todayQuote.cat);
+
+document.getElementById('dateTag').textContent =
+  today.getFullYear()+'년 '+(today.getMonth()+1)+'월 '+today.getDate()+'일';
+
+const badge = document.getElementById('catBadge');
+badge.textContent = cat.name;
+badge.style.background = cat.color;
+document.getElementById('quoteText').textContent = todayQuote.text;
+document.getElementById('quoteSource').textContent = '— ' + cat.source;
+
+/* ---------- 오늘의 배경 이미지 (3일 주기: 사진 → 숲 → 우주) ---------- */
+const scenes = [
+  document.getElementById('scenePhoto'),
+  document.getElementById('sceneForest'),
+  document.getElementById('sceneUniverse'),
+];
+const sceneIndex = ((dn % 3) + 3) % 3;
+scenes[sceneIndex].classList.add('active');
+
+/* 우주 장면일 때만 별 생성 */
+if(sceneIndex === 2){
+  const box = document.getElementById('starsBox');
+  for(let i=0;i<90;i++){
+    const s = document.createElement('span');
+    const size = Math.random()*2 + 1;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3.2)+'s';
+    box.appendChild(s);
+  }
+}
+</script>
+</body>
+</html>
