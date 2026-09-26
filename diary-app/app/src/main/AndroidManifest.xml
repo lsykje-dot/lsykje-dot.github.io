@@ -4,6 +4,10 @@
     <!-- 지문/얼굴 잠금에 필요한 권한. 인터넷 권한은 의도적으로 포함하지 않음(로컬 전용 앱) -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
+    <!-- 음성으로 일기 쓰기 기능(마이크 버튼을 누를 때만 사용). 실제 인식은 기기 내(온디바이스) 모델로만 처리하며
+         이 권한 자체가 인터넷 접근을 의미하지 않음 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:name=".DiaryApp"
         android:allowBackup="false"

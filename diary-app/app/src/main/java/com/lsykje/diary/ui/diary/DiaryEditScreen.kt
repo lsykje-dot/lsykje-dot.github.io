@@ -136,11 +136,18 @@ fun DiaryEditScreen(navController: NavController, date: LocalDate) {
                 )
             }
 
-            GhostButton(
-                text = "사진 추가",
-                onClick = { photoPicker.launch(androidx.activity.result.PickVisualMediaRequest()) },
-                leadingIcon = { Icon(Icons.Filled.AddPhotoAlternate, contentDescription = null, tint = DiaryColors.Ink, modifier = Modifier.size(18.dp)) },
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                GhostButton(
+                    text = "사진 추가",
+                    onClick = { photoPicker.launch(androidx.activity.result.PickVisualMediaRequest()) },
+                    leadingIcon = { Icon(Icons.Filled.AddPhotoAlternate, contentDescription = null, tint = DiaryColors.Ink, modifier = Modifier.size(18.dp)) },
+                )
+                VoiceInputButton(
+                    onTextRecognized = { text ->
+                        content = if (content.isBlank()) text else "$content\n$text"
+                    },
+                )
+            }
 
             Column(
                 modifier = Modifier
