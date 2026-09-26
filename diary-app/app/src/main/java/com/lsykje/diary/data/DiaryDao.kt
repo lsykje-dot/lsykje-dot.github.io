@@ -52,4 +52,8 @@ interface DiaryDao {
 
     @Query("DELETE FROM diary_photo WHERE entryId = :entryId")
     suspend fun deletePhotosForEntry(entryId: Long)
+
+    /** 백업/복원 화면에서 "N개 가져왔어요" 안내에 사용 */
+    @Query("SELECT COUNT(*) FROM diary_entry")
+    suspend fun countEntries(): Int
 }

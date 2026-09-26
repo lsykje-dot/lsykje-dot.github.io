@@ -12,6 +12,7 @@ object Routes {
     const val Settings = "settings"
     const val PdfExport = "pdf_export"
     const val PdfImport = "pdf_import"
+    const val Backup = "backup"
     const val ComingSoon = "coming_soon/{title}"
 
     fun lockSetup(firstRun: Boolean) = "lock_setup/$firstRun"

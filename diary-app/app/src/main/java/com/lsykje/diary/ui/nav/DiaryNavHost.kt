@@ -13,6 +13,7 @@ import com.lsykje.diary.ui.diary.DiaryEditScreen
 import com.lsykje.diary.ui.lock.LockEntryScreen
 import com.lsykje.diary.ui.lock.LockScreen
 import com.lsykje.diary.ui.lock.LockSetupScreen
+import com.lsykje.diary.ui.settings.BackupScreen
 import com.lsykje.diary.ui.settings.ComingSoonScreen
 import com.lsykje.diary.ui.settings.PdfExportScreen
 import com.lsykje.diary.ui.settings.PdfImportScreen
@@ -58,6 +59,8 @@ fun DiaryNavHost(navController: NavHostController = rememberNavController()) {
         composable(Routes.PdfExport) { PdfExportScreen(navController) }
 
         composable(Routes.PdfImport) { PdfImportScreen(navController) }
+
+        composable(Routes.Backup) { BackupScreen(navController) }
 
         composable(
             Routes.ComingSoon,
