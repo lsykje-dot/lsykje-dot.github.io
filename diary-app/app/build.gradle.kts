@@ -70,5 +70,9 @@ dependencies {
     implementation("androidx.exifinterface:exifinterface:1.3.7")
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    // PDF 불러오기: 안드로이드 기본 PdfRenderer는 페이지를 그림으로만 보여줄 뿐 글자를
+    // 추출하지 못하므로, 글자를 읽어낼 수 있는 PdfBox-Android를 사용(설계 문서 7-4-1절)
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

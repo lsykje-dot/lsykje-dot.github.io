@@ -11,6 +11,7 @@ object Routes {
     const val DiaryDetail = "diary_detail/{date}"
     const val Settings = "settings"
     const val PdfExport = "pdf_export"
+    const val PdfImport = "pdf_import"
     const val ComingSoon = "coming_soon/{title}"
 
     fun lockSetup(firstRun: Boolean) = "lock_setup/$firstRun"

@@ -48,8 +48,8 @@ fun SettingsScreen(navController: NavController) {
             SettingsRow("PDF 내보내기", "하루 단위 / 기간 단위") {
                 navController.navigate(Routes.PdfExport)
             }
-            SettingsRow("PDF 불러오기", "추후 업데이트 예정") {
-                navController.navigate(Routes.comingSoon("PDF 불러오기"))
+            SettingsRow("PDF 불러오기", "우리 앱 · 나의일상 자동 인식, 그 외 직접 정리") {
+                navController.navigate(Routes.PdfImport)
             }
             SettingsRow("백업 / 복원", "추후 업데이트 예정") {
                 navController.navigate(Routes.comingSoon("백업 / 복원"))
