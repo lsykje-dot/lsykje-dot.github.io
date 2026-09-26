@@ -1,0 +1,5 @@
+<resources>
+    <!-- 캔버스 디자인 시안의 "기본 그린" 톤과 동일한 값. Compose 쪽 Color.kt가 실제 UI에서는 이 값을 그대로 사용함 -->
+    <color name="window_background">#F6FAF3</color>
+    <color name="ic_launcher_background">#E3F3DE</color>
+</resources>

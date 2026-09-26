@@ -1,0 +1,8 @@
+<resources>
+    <!-- Compose가 실제 테마(색상·타이포그래피)를 담당하므로, 여기서는 스플래시 배경 등 최소한만 지정 -->
+    <style name="Theme.DiaryApp" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:statusBarColor">@color/window_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
