@@ -39,6 +39,11 @@ interface DiaryDao {
     @Query("SELECT * FROM diary_entry ORDER BY date DESC LIMIT :limit")
     fun observeRecent(limit: Int = 5): Flow<List<EntryWithPhotos>>
 
+    /** PDF 기간 내보내기용: 지정한 기간의 일기를 날짜 오름차순으로 조회 */
+    @Transaction
+    @Query("SELECT * FROM diary_entry WHERE date BETWEEN :from AND :to ORDER BY date ASC")
+    fun observeEntriesInRange(from: LocalDate, to: LocalDate): Flow<List<EntryWithPhotos>>
+
     @Insert
     suspend fun insertPhoto(photo: DiaryPhoto): Long
 

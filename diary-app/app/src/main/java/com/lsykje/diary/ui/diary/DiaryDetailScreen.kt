@@ -31,11 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.lsykje.diary.data.DiaryRepository
+import com.lsykje.diary.pdf.PdfExporter
+import com.lsykje.diary.pdf.PdfSharer
 import com.lsykje.diary.ui.nav.Routes
 import com.lsykje.diary.ui.theme.DiaryColors
 import com.lsykje.diary.ui.theme.DiaryType
 import com.lsykje.diary.ui.theme.GhostButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -102,7 +106,15 @@ fun DiaryDetailScreen(navController: NavController, date: LocalDate) {
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
                 GhostButton(text = "수정", onClick = { navController.navigate(Routes.diaryEdit(date)) })
-                GhostButton(text = "PDF로 내보내기", onClick = { navController.navigate(Routes.comingSoon("PDF 내보내기")) })
+                GhostButton(
+                    text = "PDF로 내보내기",
+                    onClick = {
+                        scope.launch {
+                            val file = withContext(Dispatchers.IO) { PdfExporter.exportDay(context, current) }
+                            PdfSharer.share(context, file)
+                        }
+                    },
+                )
                 GhostButton(
                     text = "삭제",
                     onClick = {

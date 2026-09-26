@@ -28,6 +28,18 @@
             </intent-filter>
         </activity>
 
+        <!-- PDF 내보내기 후 카카오톡/이메일 등으로 공유하거나 파일로 저장할 수 있도록
+             앱 캐시 폴더의 파일을 content:// 링크로 안전하게 노출함 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import com.lsykje.diary.ui.lock.LockEntryScreen
 import com.lsykje.diary.ui.lock.LockScreen
 import com.lsykje.diary.ui.lock.LockSetupScreen
 import com.lsykje.diary.ui.settings.ComingSoonScreen
+import com.lsykje.diary.ui.settings.PdfExportScreen
 import com.lsykje.diary.ui.settings.SettingsScreen
 import java.time.LocalDate
 
@@ -52,6 +53,8 @@ fun DiaryNavHost(navController: NavHostController = rememberNavController()) {
         }
 
         composable(Routes.Settings) { SettingsScreen(navController) }
+
+        composable(Routes.PdfExport) { PdfExportScreen(navController) }
 
         composable(
             Routes.ComingSoon,

@@ -45,8 +45,11 @@ fun SettingsScreen(navController: NavController) {
             SettingsRow("잠금 방식 관리", "지문·PIN·패턴") {
                 navController.navigate(Routes.lockSetup(firstRun = false))
             }
-            SettingsRow("PDF 내보내기 / 불러오기", "추후 업데이트 예정") {
-                navController.navigate(Routes.comingSoon("PDF 내보내기 / 불러오기"))
+            SettingsRow("PDF 내보내기", "하루 단위 / 기간 단위") {
+                navController.navigate(Routes.PdfExport)
+            }
+            SettingsRow("PDF 불러오기", "추후 업데이트 예정") {
+                navController.navigate(Routes.comingSoon("PDF 불러오기"))
             }
             SettingsRow("백업 / 복원", "추후 업데이트 예정") {
                 navController.navigate(Routes.comingSoon("백업 / 복원"))

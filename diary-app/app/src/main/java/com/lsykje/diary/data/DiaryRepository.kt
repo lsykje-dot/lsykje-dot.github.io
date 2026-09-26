@@ -16,6 +16,9 @@ class DiaryRepository(private val context: Context) {
 
     fun observeRecent(limit: Int = 5): Flow<List<EntryWithPhotos>> = dao.observeRecent(limit)
 
+    fun observeEntriesInRange(from: LocalDate, to: LocalDate): Flow<List<EntryWithPhotos>> =
+        dao.observeEntriesInRange(from, to)
+
     /**
      * 제목/본문과, 새로 추가된 사진 Uri 목록, 남겨둘 기존 사진 목록을 받아 하루 일기를 저장한다.
      * 사진은 PhotoStorage로 리사이즈·압축해 내부 저장소에 복사한 뒤 경로만 DB에 저장한다.
