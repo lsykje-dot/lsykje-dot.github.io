@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- PdfExporter가 만든 PDF는 캐시 폴더의 pdf_exports 안에 저장됨 -->
+    <cache-path name="pdf_exports" path="pdf_exports/" />
+    <!-- BackupManager가 만든 백업 zip은 캐시 폴더의 backups 안에 저장됨 -->
+    <cache-path name="backups" path="backups/" />
+</paths>

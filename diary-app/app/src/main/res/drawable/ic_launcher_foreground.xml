@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 잠금 화면 뱃지와 동일한 자물쇠 아이콘, 진한 그린(#4F9B5A) -->
+    <path
+        android:pathData="M36,50 L72,50 A6,6 0 0 1 78,56 L78,80 A6,6 0 0 1 72,86 L36,86 A6,6 0 0 1 30,80 L30,56 A6,6 0 0 1 36,50 Z"
+        android:strokeColor="#4F9B5A"
+        android:strokeWidth="5"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M40,50 L40,38 A14,14 0 0 1 68,38 L68,50"
+        android:strokeColor="#4F9B5A"
+        android:strokeWidth="5"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round" />
+</vector>
